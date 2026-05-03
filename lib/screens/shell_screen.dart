@@ -11,7 +11,9 @@ class ShellScreen extends StatelessWidget {
     if (loc.startsWith('/portfolio')) return 1;
     if (loc.startsWith('/booking')) return 2;
     if (loc.startsWith('/create')) return 3;
-    if (loc.startsWith('/shop')) return 4;
+    if (loc.startsWith('/shop') || loc.startsWith('/cart')) return 4;
+    if (loc.startsWith('/chat')) return 5;
+    if (loc.startsWith('/portal')) return 6;
     return 0;
   }
 
@@ -24,7 +26,7 @@ class ShellScreen extends StatelessWidget {
           border: Border(top: BorderSide(color: AppTheme.dark600)),
         ),
         child: BottomNavigationBar(
-          currentIndex: _index(context),
+          currentIndex: _index(context).clamp(0, 4),
           onTap: (i) {
             switch (i) {
               case 0: context.go('/'); break;
@@ -43,6 +45,15 @@ class ShellScreen extends StatelessWidget {
           ],
         ),
       ),
+      // Floating chat button
+      floatingActionButton: _index(context) != 5
+        ? FloatingActionButton(
+            mini: true,
+            backgroundColor: AppTheme.brand,
+            onPressed: () => context.go('/chat'),
+            child: const Icon(Icons.chat_bubble_outline, color: Colors.black, size: 20),
+          )
+        : null,
     );
   }
 }

@@ -27,6 +27,12 @@ class HomeScreen extends StatelessWidget {
                 expandedHeight: 280,
                 pinned: true,
                 backgroundColor: AppTheme.dark800,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.person_outline, color: Colors.white),
+                    onPressed: () => context.go('/portal'),
+                  ),
+                ],
                 flexibleSpace: FlexibleSpaceBar(
                   background: Container(
                     decoration: const BoxDecoration(

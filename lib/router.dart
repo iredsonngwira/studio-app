@@ -4,8 +4,11 @@ import 'screens/portfolio_screen.dart';
 import 'screens/services_screen.dart';
 import 'screens/booking_screen.dart';
 import 'screens/shop_screen.dart';
+import 'screens/cart_screen.dart';
 import 'screens/create_screen.dart';
 import 'screens/blog_screen.dart';
+import 'screens/chat_screen.dart';
+import 'screens/portal_screen.dart';
 import 'screens/shell_screen.dart';
 
 final appRouter = GoRouter(
@@ -21,6 +24,9 @@ final appRouter = GoRouter(
         GoRoute(path: '/shop', builder: (c, s) => const ShopScreen()),
         GoRoute(path: '/create', builder: (c, s) => const CreateScreen()),
         GoRoute(path: '/blog', builder: (c, s) => const BlogScreen()),
+        GoRoute(path: '/chat', builder: (c, s) => const ChatScreen()),
+        GoRoute(path: '/portal', builder: (c, s) => const PortalScreen()),
+        GoRoute(path: '/cart', builder: (c, s) => const CartScreen()),
       ],
     ),
   ],

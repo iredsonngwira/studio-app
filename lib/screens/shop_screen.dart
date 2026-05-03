@@ -1,21 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/queries.dart';
+import '../providers/cart_provider.dart';
 import '../theme.dart';
 import '../main.dart';
 
-class ShopScreen extends StatelessWidget {
+class ShopScreen extends ConsumerWidget {
   const ShopScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cartCount = ref.watch(cartProvider).fold(0, (s, i) => s + i.qty);
     return Query(
       options: QueryOptions(document: gql(kGetShop)),
       builder: (result, {fetchMore, refetch}) {
         final products = (result.data?['products'] as List?) ?? [];
         return Scaffold(
-          appBar: AppBar(title: const Text('Shop')),
+          appBar: AppBar(
+            title: const Text('Shop'),
+            actions: [
+              Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.shopping_cart_outlined),
+                    onPressed: () => Navigator.pushNamed(context, '/cart'),
+                  ),
+                  if (cartCount > 0)
+                    Positioned(
+                      right: 6, top: 6,
+                      child: Container(
+                        width: 16, height: 16,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: AppTheme.brand),
+                        child: Center(child: Text('$cartCount',
+                          style: const TextStyle(color: Colors.black, fontSize: 9, fontWeight: FontWeight.bold))),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
           body: result.isLoading
             ? const Center(child: CircularProgressIndicator(color: AppTheme.brand))
             : products.isEmpty
@@ -24,7 +50,7 @@ class ShopScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12,
-                    childAspectRatio: 0.75,
+                    childAspectRatio: 0.72,
                   ),
                   itemCount: products.length,
                   itemBuilder: (ctx, i) {
@@ -64,7 +90,25 @@ class ShopScreen extends StatelessWidget {
                                 SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      ref.read(cartProvider.notifier).add(CartItem(
+                                        id: p['id'] as int,
+                                        name: p['name'] as String,
+                                        priceUsd: (p['priceUsd'] as num).toDouble(),
+                                        imageUrl: p['imageUrl'] as String?,
+                                      ));
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('${p['name']} added to cart'),
+                                          backgroundColor: AppTheme.dark700,
+                                          action: SnackBarAction(
+                                            label: 'View Cart',
+                                            textColor: AppTheme.brand,
+                                            onPressed: () => Navigator.pushNamed(context, '/cart'),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(vertical: 8)),
                                     child: const Text('Add to Cart', style: TextStyle(fontSize: 11)),
