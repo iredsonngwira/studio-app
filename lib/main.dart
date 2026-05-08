@@ -11,7 +11,7 @@ import 'providers/auth_provider.dart';
 // Change this to your deployed URL before release
 const String kApiBase = String.fromEnvironment(
   'API_BASE',
-  defaultValue: 'http://10.0.2.2:8000', // Android emulator → localhost
+  defaultValue: 'https://kamotohd.onrender.com',
 );
 
 // Auth token provider — shared across the app
