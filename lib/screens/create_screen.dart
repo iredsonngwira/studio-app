@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../theme.dart';
+import '../services/offline_gallery.dart';
 
 const _pollinationsBase = 'https://image.pollinations.ai/prompt';
 
@@ -217,10 +218,16 @@ class _CreateScreenState extends State<CreateScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton.icon(
-                          onPressed: () {
-                            // TODO: save to gallery
+                          onPressed: () async {
+                            if (_imageUrl == null) return;
+                            final filename = 'generated_${DateTime.now().millisecondsSinceEpoch}.jpg';
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Image saved!')));
+                              const SnackBar(content: Text('Saving...'), duration: Duration(seconds: 1)));
+                            final path = await OfflineGalleryService.downloadPhoto(_imageUrl!, filename);
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(path != null ? 'Saved to device!' : 'Save failed.')));
+                            }
                           },
                           icon: const Icon(Icons.download, size: 16),
                           label: const Text('Save'),
