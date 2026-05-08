@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'router.dart';
 import 'theme.dart';
 import 'services/push_notifications.dart';
+import 'providers/auth_provider.dart';
 
 // Change this to your deployed URL before release
 const String kApiBase = String.fromEnvironment(
