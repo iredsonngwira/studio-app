@@ -218,6 +218,67 @@ class HomeScreen extends StatelessWidget {
                 ],
 
                 const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+                // Explorer teaser
+                _SectionHeader(title: 'Explore Malawi', onSeeAll: () => context.go('/explore')),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: GestureDetector(
+                      onTap: () => context.go('/explore'),
+                      child: Container(
+                        height: 140,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: LinearGradient(
+                            colors: [AppTheme.brand.withOpacity(0.3), AppTheme.dark700],
+                            begin: Alignment.topLeft, end: Alignment.bottomRight,
+                          ),
+                          border: Border.all(color: AppTheme.brand.withOpacity(0.3)),
+                        ),
+                        child: const Center(child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('🌍', style: TextStyle(fontSize: 36)),
+                            SizedBox(height: 8),
+                            Text('Landscapes · Culture · Wildlife', style: TextStyle(color: Colors.white70, fontSize: 13)),
+                            SizedBox(height: 4),
+                            Text('Tap to explore →', style: TextStyle(color: AppTheme.brand, fontSize: 12)),
+                          ],
+                        )),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Pre-Shoot Stylist CTA
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+                    child: GestureDetector(
+                      onTap: () => context.go('/stylist'),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppTheme.dark600),
+                          color: AppTheme.dark800,
+                        ),
+                        child: const Row(children: [
+                          Text('✨', style: TextStyle(fontSize: 28)),
+                          SizedBox(width: 14),
+                          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Text('Pre-Shoot Stylist', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                            Text('Not sure what to wear? Get AI outfit advice before your session.', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                          ])),
+                          Icon(Icons.chevron_right, color: AppTheme.brand),
+                        ]),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SliverToBoxAdapter(child: SizedBox(height: 32)),
               ],
             ],
           ),

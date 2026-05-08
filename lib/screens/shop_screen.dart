@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../services/queries.dart';
 import '../providers/cart_provider.dart';
 import '../theme.dart';
@@ -25,7 +26,7 @@ class ShopScreen extends ConsumerWidget {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.shopping_cart_outlined),
-                    onPressed: () => Navigator.pushNamed(context, '/cart'),
+                    onPressed: () => context.go('/cart'),
                   ),
                   if (cartCount > 0)
                     Positioned(
@@ -104,7 +105,7 @@ class ShopScreen extends ConsumerWidget {
                                           action: SnackBarAction(
                                             label: 'View Cart',
                                             textColor: AppTheme.brand,
-                                            onPressed: () => Navigator.pushNamed(context, '/cart'),
+                                            onPressed: () => context.go('/cart'),
                                           ),
                                         ),
                                       );

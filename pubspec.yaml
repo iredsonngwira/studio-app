@@ -1,5 +1,5 @@
 name: studio_app
-description: "Studio — Photography, Design & Creative Services"
+description: "KamotoHD — Photography, Design & Creative Services"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -14,12 +14,19 @@ dependencies:
   flutter_riverpod: ^2.5.1
   cached_network_image: ^3.3.1
   shimmer: ^3.0.0
-  shared_preferences: ^2.2.3
   http: ^1.2.1
   video_player: ^2.8.6
   chewie: ^1.8.1
   image_picker: ^1.1.2
   flutter_markdown: ^0.7.7+1
+  shared_preferences: ^2.2.3
+  firebase_core: ^3.3.0
+  firebase_messaging: ^15.1.0
+  flutter_local_notifications: ^17.2.2
+  path_provider: ^2.1.4
+  dio: ^5.7.0
+  share_plus: ^10.0.2
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:

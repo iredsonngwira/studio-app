@@ -3,8 +3,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import '../services/queries.dart';
 import '../theme.dart';
 
-class BookingScreen extends StatefulWidget {
-  const BookingScreen({super.key});
+class BookingScreen extends StatefulWidget {  const BookingScreen({super.key});
   @override
   State<BookingScreen> createState() => _BookingScreenState();
 }
@@ -19,6 +18,28 @@ class _BookingScreenState extends State<BookingScreen> {
   DateTime? _date;
   int? _serviceId;
   bool _submitted = false;
+  List<String> _bookedDates = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBookedDates();
+  }
+
+  Future<void> _loadBookedDates() async {
+    final client = GraphQLProvider.of(context).value;
+    final result = await client.query(QueryOptions(document: gql(kGetBookedDates)));
+    if (mounted) {
+      setState(() {
+        _bookedDates = ((result.data?['bookedDates'] as List?) ?? []).cast<String>();
+      });
+    }
+  }
+
+  bool _isBooked(DateTime d) {
+    final s = '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+    return _bookedDates.contains(s);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +121,7 @@ class _BookingScreenState extends State<BookingScreen> {
                             initialDate: DateTime.now().add(const Duration(days: 1)),
                             firstDate: DateTime.now(),
                             lastDate: DateTime.now().add(const Duration(days: 365)),
+                            selectableDayPredicate: (day) => !_isBooked(day),
                             builder: (ctx, child) => Theme(
                               data: Theme.of(ctx).copyWith(
                                 colorScheme: const ColorScheme.dark(primary: AppTheme.brand)),

@@ -10,6 +10,11 @@ import 'screens/blog_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/portal_screen.dart';
 import 'screens/shell_screen.dart';
+import 'screens/explorer_screen.dart';
+import 'screens/gallery_screen.dart';
+import 'screens/stylist_screen.dart';
+import 'screens/stock_screen.dart';
+import 'screens/timeline_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -22,11 +27,19 @@ final appRouter = GoRouter(
         GoRoute(path: '/services', builder: (c, s) => const ServicesScreen()),
         GoRoute(path: '/booking', builder: (c, s) => const BookingScreen()),
         GoRoute(path: '/shop', builder: (c, s) => const ShopScreen()),
+        GoRoute(path: '/cart', builder: (c, s) => const CartScreen()),
         GoRoute(path: '/create', builder: (c, s) => const CreateScreen()),
         GoRoute(path: '/blog', builder: (c, s) => const BlogScreen()),
         GoRoute(path: '/chat', builder: (c, s) => const ChatScreen()),
         GoRoute(path: '/portal', builder: (c, s) => const PortalScreen()),
-        GoRoute(path: '/cart', builder: (c, s) => const CartScreen()),
+        GoRoute(path: '/explore', builder: (c, s) => const ExplorerScreen()),
+        GoRoute(
+          path: '/gallery/:id',
+          builder: (c, s) => GalleryScreen(galleryId: int.parse(s.pathParameters['id']!)),
+        ),
+        GoRoute(path: '/stylist', builder: (c, s) => const StylistScreen()),
+        GoRoute(path: '/stock', builder: (c, s) => const StockScreen()),
+        GoRoute(path: '/timeline', builder: (c, s) => const TimelineScreen()),
       ],
     ),
   ],
