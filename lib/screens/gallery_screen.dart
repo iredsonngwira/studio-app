@@ -5,8 +5,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/queries.dart';
+import '../services/offline_gallery.dart';
 import '../theme.dart';
 import '../main.dart';
+import 'send_memory_sheet.dart';
 
 class GalleryScreen extends ConsumerStatefulWidget {
   final int galleryId;
@@ -172,7 +174,17 @@ class _PhotosGrid extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(child: ElevatedButton.icon(
-                    onPressed: () => launchUrl(Uri.parse('$kApiBase${f['url']}')),
+                    onPressed: () async {
+                      final filename = f['filename'] as String? ?? 'photo_${f['id']}.jpg';
+                      final url = '$kApiBase${f['url']}';
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Downloading...'), duration: Duration(seconds: 1)));
+                      final path = await OfflineGalleryService.downloadPhoto(url, filename);
+                      if (path != null && context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Saved: $filename')));
+                      }
+                    },
                     icon: const Icon(Icons.download, size: 16),
                     label: const Text('Download'),
                   )),
@@ -184,6 +196,26 @@ class _PhotosGrid extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppTheme.brand,
                       side: const BorderSide(color: AppTheme.brand),
+                      shape: const StadiumBorder(),
+                    ),
+                  )),
+                  const SizedBox(width: 12),
+                  Expanded(child: OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: AppTheme.dark800,
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                        builder: (_) => SendMemorySheet(galleryId: galleryId, photoId: f['id'] as int),
+                      );
+                    },
+                    icon: const Icon(Icons.favorite_border, size: 16),
+                    label: const Text('Send'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.pink,
+                      side: const BorderSide(color: Colors.pink),
                       shape: const StadiumBorder(),
                     ),
                   )),

@@ -16,6 +16,8 @@ import 'screens/stylist_screen.dart';
 import 'screens/stock_screen.dart';
 import 'screens/timeline_screen.dart';
 
+import 'screens/gift_session_screen.dart';
+
 final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
@@ -40,6 +42,7 @@ final appRouter = GoRouter(
         GoRoute(path: '/stylist', builder: (c, s) => const StylistScreen()),
         GoRoute(path: '/stock', builder: (c, s) => const StockScreen()),
         GoRoute(path: '/timeline', builder: (c, s) => const TimelineScreen()),
+        GoRoute(path: '/gift', builder: (c, s) => const GiftSessionScreen()),
       ],
     ),
   ],

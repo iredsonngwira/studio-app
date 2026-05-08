@@ -278,6 +278,33 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
 
+                // Gift a Session CTA
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                    child: GestureDetector(
+                      onTap: () => context.go('/gift'),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppTheme.dark600),
+                          color: AppTheme.dark800,
+                        ),
+                        child: const Row(children: [
+                          Text('🎁', style: TextStyle(fontSize: 28)),
+                          SizedBox(width: 14),
+                          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Text('Gift a Session', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                            Text('Send a photo session as a gift to family in Malawi.', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                          ])),
+                          Icon(Icons.chevron_right, color: AppTheme.brand),
+                        ]),
+                      ),
+                    ),
+                  ),
+                ),
+
                 const SliverToBoxAdapter(child: SizedBox(height: 32)),
               ],
             ],

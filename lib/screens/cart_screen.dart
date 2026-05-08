@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../providers/cart_provider.dart';
 import '../theme.dart';
 import '../main.dart';
@@ -137,55 +138,39 @@ class CartScreen extends ConsumerWidget {
       context: context,
       backgroundColor: AppTheme.dark800,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (_) => Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Choose Payment Method', style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text('Choose Payment Method',
+                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
             _PayOption(
-              icon: '💳', label: 'PayPal', subtitle: 'International — USD',
-              onTap: () { Navigator.pop(context); _showSuccess(context); },
+              icon: '💳',
+              label: 'PayPal',
+              subtitle: 'International — USD',
+              onTap: () {
+                Navigator.pop(context);
+                launchUrl(Uri.parse('$kApiBase/shop/cart/'),
+                    mode: LaunchMode.externalApplication);
+              },
             ),
             const SizedBox(height: 12),
             _PayOption(
-              icon: '📱', label: 'Mobile Money', subtitle: 'Airtel Money / TNM Mpamba — MWK',
-              onTap: () { Navigator.pop(context); _showSuccess(context); },
+              icon: '📱',
+              label: 'Mobile Money',
+              subtitle: 'Airtel Money / TNM Mpamba — MWK',
+              onTap: () {
+                Navigator.pop(context);
+                launchUrl(Uri.parse('$kApiBase/orders/paychangu/'),
+                    mode: LaunchMode.externalApplication);
+              },
             ),
             const SizedBox(height: 20),
           ],
         ),
-      ),
-    );
-  }
-
-  void _showSuccess(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        backgroundColor: AppTheme.dark800,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.check_circle, color: AppTheme.brand, size: 60),
-            SizedBox(height: 16),
-            Text('Order Placed!', style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Text("We'll process your order and be in touch shortly.",
-              style: TextStyle(color: Colors.grey), textAlign: TextAlign.center),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK', style: TextStyle(color: AppTheme.brand)),
-          ),
-        ],
       ),
     );
   }
