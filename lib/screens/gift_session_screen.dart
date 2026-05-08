@@ -89,9 +89,10 @@ class _GiftSessionScreenState extends State<GiftSessionScreen> {
                         }).networkResult;
                         final result = res?.data?['purchaseGiftSession'];
                         if (result?['success'] == true) {
-                          // Open PayPal payment on website
-                          await launchUrl(Uri.parse('$kApiBase/orders/gift/'));
-                          setState(() => _giftCode = result['code']);
+                          setState(() => _giftCode = result['code'] as String);
+                          // Open payment page after showing code
+                          launchUrl(Uri.parse('$kApiBase/orders/gift/'),
+                              mode: LaunchMode.externalApplication);
                         } else {
                           setState(() => _error = result?['message'] ?? 'Failed. Please try again.');
                         }
@@ -156,6 +157,9 @@ class _SuccessView extends StatelessWidget {
               ),
               child: Text(code, style: const TextStyle(color: AppTheme.brand, fontSize: 22, fontWeight: FontWeight.bold, letterSpacing: 3)),
             ),
+            const SizedBox(height: 16),
+            const Text('⚠️ Complete payment in the browser to activate this gift.',
+                style: TextStyle(color: Colors.orange, fontSize: 12), textAlign: TextAlign.center),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),

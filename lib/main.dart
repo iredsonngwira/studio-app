@@ -21,37 +21,50 @@ void main() async {
   await Firebase.initializeApp();
   await initHiveForFlutter();
 
-  // Restore saved auth token
   final prefs = await SharedPreferences.getInstance();
   final savedToken = prefs.getString('auth_token');
+  final savedEmail = prefs.getString('auth_email');
 
-  // Init push notifications (non-blocking)
   initPushNotifications(authToken: savedToken).catchError((_) {});
 
   runApp(ProviderScope(
     overrides: [
       authTokenProvider.overrideWith((ref) => savedToken),
     ],
-    child: const StudioApp(),
+    child: StudioApp(savedToken: savedToken, savedEmail: savedEmail),
   ));
 }
 
 class StudioApp extends ConsumerWidget {
-  const StudioApp({super.key});
+  final String? savedToken;
+  final String? savedEmail;
+  const StudioApp({super.key, this.savedToken, this.savedEmail});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final token = ref.watch(authTokenProvider);
 
+    // Restore auth state on first build if token exists
+    if (savedToken != null && !ref.read(authProvider).isLoggedIn) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(authProvider.notifier).restoreFromToken(
+          savedToken!,
+          user: savedEmail != null ? {'name': savedEmail!.split('@')[0], 'email': savedEmail} : null,
+        );
+      });
+    }
+
     final httpLink = HttpLink('$kApiBase/graphql/');
     final authLink = AuthLink(getToken: () => token != null ? 'Bearer $token' : null);
     final link = token != null ? authLink.concat(httpLink) : httpLink;
 
+    // Key forces GraphQLProvider to rebuild with new client when token changes
     final client = ValueNotifier(
       GraphQLClient(link: link, cache: GraphQLCache(store: HiveStore())),
     );
 
     return GraphQLProvider(
+      key: ValueKey(token),
       client: client,
       child: MaterialApp.router(
         title: 'Kamoto HD',

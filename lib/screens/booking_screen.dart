@@ -3,7 +3,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import '../services/queries.dart';
 import '../theme.dart';
 
-class BookingScreen extends StatefulWidget {  const BookingScreen({super.key});
+class BookingScreen extends StatefulWidget {
+  const BookingScreen({super.key});
   @override
   State<BookingScreen> createState() => _BookingScreenState();
 }
@@ -19,11 +20,15 @@ class _BookingScreenState extends State<BookingScreen> {
   int? _serviceId;
   bool _submitted = false;
   List<String> _bookedDates = [];
+  bool _datesLoaded = false;
 
   @override
-  void initState() {
-    super.initState();
-    _loadBookedDates();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_datesLoaded) {
+      _datesLoaded = true;
+      _loadBookedDates();
+    }
   }
 
   Future<void> _loadBookedDates() async {

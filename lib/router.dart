@@ -15,7 +15,6 @@ import 'screens/gallery_screen.dart';
 import 'screens/stylist_screen.dart';
 import 'screens/stock_screen.dart';
 import 'screens/timeline_screen.dart';
-
 import 'screens/gift_session_screen.dart';
 
 final appRouter = GoRouter(

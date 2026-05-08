@@ -41,6 +41,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         // Persist token
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', token);
+        await prefs.setString('auth_email', user['email'] as String? ?? '');
         // Update global token so GraphQL client rebuilds with auth header
         _ref.read(authTokenProvider.notifier).state = token;
         state = state.copyWith(token: token, user: user, loading: false);
@@ -59,6 +60,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
+    await prefs.remove('auth_email');
     _ref.read(authTokenProvider.notifier).state = null;
     state = const AuthState();
   }
